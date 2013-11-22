@@ -1,38 +1,32 @@
-var Note = Backbone.Model.extend({});
+var User = Backbone.Model.extend({});
 
-var Notes = Backbone.Collection.extend({
-	model : Note,
-	initialize : function(models,options){
-		this.doc = options.doc;
-	},
-	url : function(){
-		return this.doc.url() + '/notes';
-	}
-});
-
-
-var Document = Backbone.Model.extend({
-	initialize: function(){
-		this.notes = new Notes([],{ doc : this});
-	},
-	addNote : function (text){
-		this.notes.create({ text : text });
-	}
-});
-
-var Documents = Backbone.Collection.extend({
-    model : Document,
-    url: '/documents',
-    initialize: function(){
-        this.on('reset',this.getNotes,this);
+var ShowUserView = Backbone.View.extend({
+    template : _.template("#showUserView").html(),
+    initialize : function(){
+        this.model.on('change',this.render,this);
     },
-    getNotes : function(){
-        this.each(function(doc){
-            doc.notes = new Notes([],{ doc : doc});
-            doc.notes.fetch({reset: true});
-        });
+    render : function(){
+        this.el.innerHTML = this.template(this.model.toJSON());
+        return this;
     }
 });
 
-ds = new Documents();
-ds.fetch({reset: true});
+var EditUserView = Backbone.View.extend({
+    template : _.template($("#EditUserView").html()),
+    events : {
+        "click button" : "saveChange"
+    },
+    render : function(){
+        this.el.innerHTML = this.template(this.model.toJSON());
+        return this;
+    },
+    saveChange : function(){
+        this.model.set({name: $("#name").val(),twitter:$("#twitter").val()});
+    }
+});
+
+var me = new User({ name : "Martin", twitter : "psysonik"}),
+    showView = new ShowUserView({model : me}),
+    editView = new EditUserView({model : me});
+
+    $("#main").append(showView.render().el).append(editView.render().el);
