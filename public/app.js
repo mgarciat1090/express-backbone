@@ -13,6 +13,9 @@ var ShowUserView = Backbone.View.extend({
 
 var EditUserView = Backbone.View.extend({
     template: _.template($("#editUserView").html()),
+    initialize : function(){
+        this.model.on('change',this.render,this);
+    },
     events : {
         "click button" : "saveChanges"
     },
