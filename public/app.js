@@ -35,6 +35,26 @@ PersonView = Backbone.View.extend({
     }
 });
 
-var person = new Person({name : "John Doe", age: 30, twitter : "john_doe"});
-var personView = new PersonView({model : person});
-$("#main").append(personView.render().el)
+var People = Backbone.Collection.extend({
+    model : Person
+});
+
+var PeopleView = Backbone.View.extend({
+    template : _.template($("#peopleView").html()),
+    render : function(){
+        this.el.innerHTML = this.template();
+        this.collection.forEach(function(model){
+            this.el.appendChild(new PersonView({ model : model }).render().el);
+        },this);
+        return this;
+    }
+});
+
+var people = new People();
+people.add({ name: "john Doe",age:30,twitter: "john_doe"});
+people.add({ name: "jane Doe",age:25,twitter: "jane_doe"});
+people.add({ name : "Sally White",age : 35,twitter : "sally_white"});
+
+var peopleView = new PeopleView({collection : people });
+
+$("#main").append(peopleView.render().el)
