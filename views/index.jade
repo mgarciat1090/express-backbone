@@ -1,15 +1,14 @@
 #main
 
-script(type="text/template" id="personView")
-    <h2><%= person.name %></h2>
-    <ul>
-    <li>Age: <%= person.age %></li>
-    <li>Twitter: <%= twitterLink(person.twitter) %></li>
-    </ul>
+script(type="text/template" id="showUserView")
+    <h1> <%= name %> </h1>
+    <p> Twitter: <a href="http://twitter.com/<%= twitter %>">@<%= twitter %></a></p>
 
-script(type="text/template", id="peopleView")
-    <h1>People</h1>
-
+script(type="text/template",id="editUserView")
+    <h1>Editing </h1>
+    <p>Name: <input type="text" name="name" id="name" value="<%= name %>" /></p>
+    <p>Twitter Handle: <input type="text" name="twitter" id="twitter" value="<%= twitter %>" /></p>
+    <p><button>Update</button></p>
 
 script(src="jquery.min.js")
 script(src="underscore-min.js")
