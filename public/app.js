@@ -1,35 +1,28 @@
-var User = Backbone.Model.extend({});
+var Document = Backbone.Model.extend({});
+var Documents = Backbone.Collection.extend({
+    model : Document
+});
 
-var ShowUserView = Backbone.View.extend({
-    template: _.template($("#showUserView").html()),
-    initialize : function(){
-        this.model.on('change',this.render,this);
-    },
+var DocumentView = Backbone.View.extend({
+    template : Templates.Document,
     render : function(){
         this.el.innerHTML = this.template(this.model.toJSON());
         return this;
     }
+
 });
 
-var EditUserView = Backbone.View.extend({
-    template: _.template($("#editUserView").html()),
-    initialize : function(){
-        this.model.on('change',this.render,this);
-    },
-    events : {
-        "click button" : "saveChanges"
-    },
+var DocumentsView = Backbone.View.extend({
+    template : Templates.Documents,
     render : function(){
-        this.el.innerHTML = this.template(this.model.toJSON());
+        this.el.innerHTML = this.template({ length: this.collection.length });
+        this.collection.forEach(function(doc){
+            this.el.appendChild(new DocumentView({ model : doc}).render().el);
+        },this);
         return this;
-    },
-    saveChanges : function(){
-        this.model.set({ name : $("#name").val(), twitter  : $("#twitter").val() });
     }
 });
 
-var me = new User({name : "Martin",twitter : "CoryKraftsoff"}),
-    showView = new ShowUserView({ model : me }),
-    editView = new EditUserView({ model : me });
+var documents = new Documents([ { name: "Doc A", lines: 100, words : 300 }, { name: "Doc B",  lines : 1000, words : 1235 } ]);
 
-$("#main").append(showView.render().el).append(editView.render().el)
+$("#main").append(new DocumentsView({ collection : documents}).render().el);
