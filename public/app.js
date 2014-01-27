@@ -1,32 +1,32 @@
-var User = Backbone.Model.extend({});
+//APP MODULE
 
-var ShowUserView = Backbone.View.extend({
-    template : _.template("#showUserView").html(),
-    initialize : function(){
-        this.model.on('change',this.render,this);
-    },
-    render : function(){
-        this.el.innerHTML = this.template(this.model.toJSON());
-        return this;
-    }
-});
+var APP = APP || {};
 
-var EditUserView = Backbone.View.extend({
-    template : _.template($("#EditUserView").html()),
-    events : {
-        "click button" : "saveChange"
-    },
-    render : function(){
-        this.el.innerHTML = this.template(this.model.toJSON());
-        return this;
-    },
-    saveChange : function(){
-        this.model.set({name: $("#name").val(),twitter:$("#twitter").val()});
-    }
-});
+(function(APP){
+    var AppView = Backbone.View.extend({
+        el : "#main",
+        initialize : function(){
+            this.users = new APP.User.Collection([
+                {name : "Andrew", email : "andrew@gmail.com"},
+                {name : "Paul", email : "paul@gmail.com"},
+                {name : "David", email : "david@gmail.com"}
+                ]);
 
-var me = new User({ name : "Martin", twitter : "psysonik"}),
-    showView = new ShowUserView({model : me}),
-    editView = new EditUserView({model : me});
+            this.posts = new APP.Post.Collection([
+                { title : "Post 1", content : "content for post 1"},
+                { title : "Post 2", content : "content for post 2"},
+                { title : "Post 3", content : "content for post 3"}
+                ]);
+            this.render();
+        },
+        render : function(){
+            this.$el
+                .empty()
+                .append(new APP.User.Views.CollectionView({ collection : this.users }).render().el)
+                .append(new APP.Post.Views.CollectionView({ collection : this.posts }).render().el);
+        }
+    });
 
-    $("#main").append(showView.render().el).append(editView.render().el);
+    new AppView();
+
+}(APP));
