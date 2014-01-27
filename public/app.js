@@ -7,11 +7,19 @@ var v = new (Backbone.View.extend({
 
 var Router = Backbone.Router.extend({
     routes : {
+        "users" : "showAllUsers",
         "users/new" : "createUser",
-        "users/:id" : "showUser"
+        "users/:id" : "showUser",
+        "*other" : "defaultAction"
     },
     initialize : function(){
         this.route(/^pages\/(\d+)\/(\d+)/,"showPages");
+    },
+    data : function(){
+        v.render("data");
+    },
+    showAllUsers : function(){
+        console.log('show all users');
     },
     showPages : function(from,to){
         v.render("showing pages " + from + " to " + to);
@@ -21,6 +29,9 @@ var Router = Backbone.Router.extend({
     },
     showUser : function(id){
         v.render("showing user #" + id);
+    },
+    defaultAction : function(other){
+        v.render(other);
     }
 });
 
