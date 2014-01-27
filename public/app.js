@@ -10,6 +10,12 @@ var Router = Backbone.Router.extend({
         "users/new" : "createUser",
         "users/:id" : "showUser"
     },
+    initialize : function(){
+        this.route(/^pages\/(\d+)\/(\d+)/,"showPages");
+    },
+    showPages : function(from,to){
+        v.render("showing pages " + from + " to " + to);
+    },
     createUser : function(){
         v.render("creating a user");
     },
