@@ -5,40 +5,33 @@ var v = new (Backbone.View.extend({
     }
 }));
 
-var Router = Backbone.Router.extend({
+var R1 = Backbone.Router.extend({
     routes : {
-        "users" : "showAllUsers",
-        "users/new" : "createUser",
-        "users/:id" : "showUser",
-        "*other" : "defaultAction"
+        "" : "index",
+        "first" : "first"
     },
-    initialize : function(){
-        this.route(/^pages\/(\d+)\/(\d+)/,"showPages");
+    index : function(){
+        v.render("R1, index");
     },
-    data : function(){
-        v.render("data");
-    },
-    showAllUsers : function(){
-        console.log('show all users');
-    },
-    showPages : function(from,to){
-        v.render("showing pages " + from + " to " + to);
-    },
-    createUser : function(){
-        v.render("creating a user");
-    },
-    showUser : function(id){
-        v.render("showing user #" + id);
-    },
-    defaultAction : function(other){
-        v.render(other);
+    first : function(){
+        v.render("R1, first");
     }
 });
 
-var r = new Router();
+var R2 = Backbone.Router.extend({
+    routes : {
+        "" : "index",
+        "second" : "second"
+    },
+    index : function(){
+        v.render("R2, index");
+    },
+    second : function(){
+        v.render("R2, second");
+    }
+});
 
-r.on('route:createUser',function(){
-    v.el.innerHTML += "creating a user from an event callback";
-})
+var r1 = new R1(),
+    r2 = new R2();
 
-Backbone.history.start({ pushState : true})
+Backbone.history.start({ pushState : true});
