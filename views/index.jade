@@ -1,10 +1,8 @@
 #main
 
 
-script(src="/lib/jquery.min.js")
-script(src="/lib/underscore-min.js")
-script(src="/lib/backbone-min.js")
-script(src="/templates.js")
-script(src="/modules/user.js")
-script(src="/modules/post.js")
-script(src="app.js")
+script(src="/lib/require.js")
+script
+    require(['app'],function(App){
+        new App.AppView().render();
+    })
